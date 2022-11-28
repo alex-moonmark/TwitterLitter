@@ -1,0 +1,49 @@
+﻿@page "/tweetsamples"
+@layout MainLayout
+
+
+<PageTitle>Tweet Samples</PageTitle>
+<h1>Tweet Samples</h1>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 flex-row align-middle">
+            <button class="btn btn-primary m-1" @onclick="GetTweetSamples">Show Sample Tweets</button>
+            <input type="checkbox" checked="@enableAutoRefresh" oninput="@(async(ChangeEventArgs e) => AutoRefreshChanged(e))" /><span> Auto-Update</span>
+        </div>
+    </div>
+    <AdvancedTimer IntervalInMilisec="2000" Occurring="Times.Infinite()" AutoStart="true" OnIntervalElapsed="@(c => ReloadAllData(enableAutoRefresh))"></AdvancedTimer>
+    <div class="row">
+        <div class="col-md-12 text-right table-striped">
+            <p class="card-header fw-bolder fs-3">Most Recent Tweets</p>
+            @if (tweetWrappers != null)
+            {
+
+                @foreach (var tweet in tweetWrappers)
+                {
+                    string style = (tweetWrappers.IndexOf(tweet) % 2 == 0 ? "background-color:lightgray;" : "");
+                    <div class="row m-3 col-md-6 rounded-3" style="@style">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-12 table-sm fw-bolder">
+                                    @((MarkupString)formatHelper.FormatTweetUserDisplay(tweet.Includes.Users.First().Name, tweet.Includes.Users.First().UserName))
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 table-secondary">
+                                    @tweet.Tweet.Text
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            }   
+        </div>
+    </div>
+</div>
+
+
+
+
+
+

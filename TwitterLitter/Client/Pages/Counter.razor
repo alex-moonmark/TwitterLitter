@@ -1,0 +1,56 @@
+﻿@page "/tweetstatistics"
+@inherits TwitterLitter.Client.Pages.CounterBase
+<PageTitle>Tweet Statistics</PageTitle>
+
+<h1>Tweet Statistics</h1>
+<AdvancedTimer IntervalInMilisec="2000" Occurring="Times.Infinite()" AutoStart="true" OnIntervalElapsed="@(c => ReloadAllData(enableAutoRefresh))"></AdvancedTimer>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 flex-row align-middle">
+            <button class="btn btn-primary m-1" @onclick="IncrementCount">Update Tweets Processed</button>
+            <button class="btn btn-primary m-1" @onclick="CancelTwitterFeed">Cancel Twitter Feed</button>
+            <button class="btn btn-primary m-1" @onclick="LoadTrendingHashtags">Refresh Trending Hashtags</button>
+            <input type="checkbox" checked="@enableAutoRefresh" oninput="@(async(ChangeEventArgs e) => AutoRefreshChanged(e))" /><span> Auto-Update</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <p role="status">Tweets Processed: @currentCount.ToString("N0")</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-right">
+            @if (trendingHashtags != null)
+                    {
+            <p class="table-light fw-bold fs-3">Trending Hashtags</p>
+            <table class="table rounded shadow table-striped table-hover">
+                <thead>
+                    
+                    <tr class="card-header">
+                        <th scope="col">Hashtag</th>
+                        <th scope="col">Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                        @foreach (var hashtag in trendingHashtags)
+                        {
+                            <tr>
+                                <td>@hashtag.Hashtag</td>
+                                <td>@hashtag.Count.ToString("N0")</td>
+                            </tr>
+                        }    
+                    
+                    
+
+                </tbody>
+            </table>
+            }
+        </div>
+    </div>
+</div>
+
+
+
+
+
